@@ -30,6 +30,15 @@
 
   <servlet-mapping>
     <servlet-name>springMVC</servlet-name>
+    <!--
+      *.action
+      *.do
+      /:所有请求 每一次请求都是访问Controller
+        1、弊端 容易屏蔽静态资源文件
+        2、支持url地址Restful风格 url地址携带参数直接给值
+        /crm/user/login?loginAct=...&loginPwd=...&....
+        /crm/user/login/admin/123
+    -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
