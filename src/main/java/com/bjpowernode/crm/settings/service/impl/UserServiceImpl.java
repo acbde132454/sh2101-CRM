@@ -90,4 +90,13 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public void updatePwd(User user) {
+        //count:影响的记录数
+        int count = userMapper.updateByPrimaryKeySelective(user);
+        if(count == 0){
+            throw new CrmException(CrmEnum.USER_LOGIN_EXPIRE);
+        }
+    }
 }

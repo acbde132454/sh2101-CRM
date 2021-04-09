@@ -11,9 +11,11 @@ import lombok.Data;
  *   返回用户所需要的数据
  */
 @Data
-public class ResultVo {
+public class ResultVo<T> {
 
     private boolean isOk;//操作是否成功
     private String message;//给客户端返回的消息
+
+    private T t;//返回
 
 }

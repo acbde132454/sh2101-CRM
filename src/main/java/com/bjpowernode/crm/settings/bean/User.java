@@ -32,6 +32,6 @@ public class User {
     private String createBy;
     private String editTime;
     private String editBy;
-
+    private String img;//用户头像
 
 }

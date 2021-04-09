@@ -1,10 +1,14 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link href="/crm/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<link href="/crm/jquery/layer.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="/crm/jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="/crm/jquery/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/crm/jquery/layer.js"></script>
 <script type="text/javascript" src="/crm/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
@@ -80,7 +84,7 @@
 					<h4 class="modal-title">修改密码</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" id="updatePwdForm">
 						<div class="form-group">
 							<label for="oldPwd" class="col-sm-2 control-label">原密码</label>
 							<div class="col-sm-10" style="width: 300px;">
@@ -101,11 +105,18 @@
 								<input type="text" class="form-control" id="confirmPwd" style="width: 200%;">
 							</div>
 						</div>
+
+						<div class="form-group">
+							<label for="confirmPwd" class="col-sm-2 control-label">上传文件</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="file" name="img" id="img">
+							</div>
+						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='/crm/login.html';">更新</button>
+					<button type="button" class="btn btn-primary" onclick="updatePwd()">更新</button>
 				</div>
 			</div>
 		</div>
@@ -139,7 +150,17 @@
 			<ul>
 				<li class="dropdown user-dropdown">
 					<a href="javascript:void(0)" style="text-decoration: none; color: white;" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-user"></span> ${sessionScope.user.name} <span class="caret"></span>
+						<c:choose>
+							<c:when test="${empty sessionScope.user.img}">
+								<span id="span" class="glyphicon glyphicon-user"></span>
+								<img style="width:30px;height:30px;border-radius:100%;display: none" id="photo" />
+								${sessionScope.user.name}
+								<span class="caret"></span>
+							</c:when>
+							<c:otherwise>
+								<img style="width:30px;height:30px;border-radius:100%" src="${sessionScope.user.img}" id="photo" />${sessionScope.user.name} <span class="caret"></span>
+							</c:otherwise>
+						</c:choose>
 					</a>
 					<ul class="dropdown-menu">
 						<li><a href="/crm/settings/index.html"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>
@@ -201,6 +222,63 @@
 	
 	<!-- 底部 -->
 	<div id="down" style="height: 30px; width: 100%; position: absolute;bottom: 0px;"></div>
-	
+
+<script>
+
+	//异步校验用户输入的原密码是否正确 focus
+	$('#oldPwd').blur(function () {
+		$.post("/crm/settings/user/verifyPwd",{
+			//输入的原密码
+			'oldPwd' : $(this).val()
+		},function(data){
+			if(!data.ok){
+				layer.alert(data.message, {icon: 5});
+			}
+		},'json')
+	});
+
+	//异步上传文件
+	$('#img').change(function () {
+		$.ajaxFileUpload({
+				url: '/crm/settings/user/fileUpload', //用于文件上传的服务器端请求地址
+				fileElementId: 'img', //文件上传域的ID
+				dataType: 'json', //返回值类型 一般设置为json
+				success : function (data,status) {
+					if(data.ok){
+						layer.alert(data.message, {icon: 1});
+						$('#photo').prop('src',data.t);
+						$('#photo').css('display',"inline");
+						$('#span').css('display',"none");
+					}
+				},
+			}
+		)
+		return false;
+	});
+
+	//js判断输入的新密码和确认密码是否一致
+	$('#confirmPwd').blur(function () {
+		if($('#newPwd').val() != $(this).val()){
+			layer.alert("新密码和确认密码不一致", {icon: 5});
+			return;
+		}
+	});
+
+	function updatePwd() {
+		$.post("/crm/settings/user/updatePwd",{
+			//输入的原密码
+			'newPwd' : $('#newPwd').val()
+		},function(data){
+			if(data.ok){
+				layer.alert(data.message, {icon: 6});
+				//隐藏模特窗口
+				$('#editPwdModal').modal('hide');
+
+				//清空模特窗口表单信息 jquery没有提供清空表单的函数，只能使用原生态js清空表单 <input type="reset" />
+				document.getElementById("updatePwdForm").reset();
+			}
+		},'json')
+	}
+</script>
 </body>
 </html>

@@ -17,4 +17,6 @@ public interface UserService {
     List<User> list();
 
     User login(User user);
+
+    void updatePwd(User user);
 }
