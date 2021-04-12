@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.base.bean;
 
+import com.github.pagehelper.PageInfo;
 import lombok.Data;
 
 /**
@@ -17,5 +18,7 @@ public class ResultVo<T> {
     private String message;//给客户端返回的消息
 
     private T t;//返回
+
+    private PageInfo pageInfo;
 
 }
