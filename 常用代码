@@ -3,3 +3,23 @@
 ajax异步请求
 $.post("",{},function(data){
 },'json')
+
+<script type="text/javascript" src="/crm/jquery/layer.js"></script>
+<link href="/crm/jquery/layer/theme/default/layer.css" type="text/css" rel="stylesheet" />
+layer.alert(data.message, {icon: 6});
+
+
+
+添加市场活动备注方式一
+$('#remarkDiv').before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
+						"\t\t\t\t<img title=\"zhangsan\" src=\"/crm/image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">\n" +
+						"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
+						"\t\t\t\t\t<h5>"+$('#remark').val()+"</h5>\n" +
+						"\t\t\t\t\t<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>"+'${activity.name}'+"</b> <small style=\"color: gray;\"> ${activity.name} ${activity.createBy}</small>\n" +
+						"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
+						"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+						"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+						"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+						"\t\t\t\t\t</div>\n" +
+						"\t\t\t\t</div>\n" +
+						"\t\t\t</div>");

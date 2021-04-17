@@ -25,6 +25,8 @@ public class UserController {
     private UserService userService;
     //传统方式
     @RequestMapping("/settings/user/login")
+    // String name = reqeust.getParamter("name")  String pwd = reqeust.getParamter("loginPwd")
+    // User usr = new User();   usr.setName(name)  usr.setName(pwd)
     public String login(User user, Model model,HttpServletRequest request){
         try{
             //remote:远程的
@@ -123,6 +125,7 @@ public class UserController {
 
     @RequestMapping("/settings/user/updatePwd")
     @ResponseBody
+    //request.getParamter("newPwd")
     public ResultVo updatePwd(String newPwd,HttpSession session){
         ResultVo resultVo = new ResultVo();
         try{

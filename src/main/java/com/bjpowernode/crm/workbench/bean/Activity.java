@@ -6,6 +6,7 @@ import tk.mybatis.mapper.code.Style;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Data
 @Table(name = "tbl_activity")
@@ -24,5 +25,11 @@ public class Activity {
     private String createBy;
     private String editTime;
     private String editBy;
+
+
+
+
+    //市场活动备注
+    private List<ActivityRemark> activityRemarks;
 
 }
