@@ -178,4 +178,20 @@ public class ActivityServiceImpl implements ActivityService {
         }
         return activityRemark;
     }
+
+    @Override
+    public void updateRemark(ActivityRemark activityRemark) {
+        int count = activityRemarkMapper.updateByPrimaryKeySelective(activityRemark);
+        if(count == 0){
+            throw new CrmException(CrmEnum.ACTIVITY_REMARK_UPDATE);
+        }
+    }
+
+    @Override
+    public void deleteRemark(String id) {
+        int count = activityRemarkMapper.deleteByPrimaryKey(id);
+        if(count == 0){
+            throw new CrmException(CrmEnum.ACTIVITY_REMARK_DELETE);
+        }
+    }
 }

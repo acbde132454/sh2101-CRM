@@ -10,7 +10,8 @@
 
 <script type="text/javascript" src="/crm/jquery/jquery-1.11.1-min.js"></script>
 <script type="text/javascript" src="/crm/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/crm/jquery/layer.js"></script>
+
+	<script type="text/javascript" src="/crm/jquery/layer.js"></script>
 
 
 <script type="text/javascript">
@@ -73,6 +74,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" role="form">
+						<input type="hidden" id="id" />
                         <div class="form-group">
                             <label for="edit-describe" class="col-sm-2 control-label">内容</label>
                             <div class="col-sm-10" style="width: 81%;">
@@ -83,7 +85,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="updateRemarkBtn">更新</button>
+                    <button type="button" class="btn btn-primary" onclick="updateRemark()" id="updateRemarkBtn">更新</button>
                 </div>
             </div>
         </div>
@@ -222,17 +224,19 @@
 		</div>
 
 		<c:forEach items="${activity.activityRemarks}" var="activityRemark">
-			<div class="remarkDiv" style="height: 60px;">
+			<div class="remarkDiv" id="${activityRemark.id}div" style="height: 60px;">
 				<img title="zhangsan" src="${activityRemark.img}" style="width: 30px; height:30px;">
 				<div style="position: relative; top: -40px; left: 40px;" >
-					<h5>${activityRemark.noteContent}！</h5>
+					<h5 id="${activityRemark.id}h5">${activityRemark.noteContent}</h5>
 					<font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;"> ${activity.createTime} ${activity.createBy}</small>
 					<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-						<a class="myHref" href="javascript:void(0);">
+						<a class="myHref" onclick="openEditRemark('${activityRemark.noteContent}','${activityRemark.id}')" href="javascript:void(0);">
 							<span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span>
 						</a>
 						&nbsp;&nbsp;&nbsp;&nbsp;
-						<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
+						<a class="myHref" href="javascript:void(0);" onclick="deleteRemark('${activityRemark.id}')">
+							<span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -261,17 +265,17 @@
 				layer.alert(data.message, {icon: 6});
 				//方式一:js实现
 				//见常用代码
-				//方式二:通过后台添加备注成功后把内容返回到前台，再次动态拼接页面的备注内容
 				var activityRemark = data.t;
-				$('#remarkDiv').before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
+				//方式二:通过后台添加备注成功后把内容返回到前台，再次动态拼接页面的备注内容
+				$('#remarkDiv').before("<div id="+activityRemark.id+"div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
 						"\t\t\t\t<img title=\"zhangsan\" src="+activityRemark.img+" style=\"width: 30px; height:30px;\">\n" +
 						"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
-						"\t\t\t\t\t<h5>"+activityRemark.noteContent+"</h5>\n" +
+						"\t\t\t\t\t<h5 id="+activityRemark.id+"h5>"+activityRemark.noteContent+"</h5>\n" +
 						"\t\t\t\t\t<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>"+'${activity.name}'+"</b> <small style=\"color: gray;\"> ${activity.name} ${activity.createBy}</small>\n" +
 						"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
-						"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+						"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"openEditRemark('"+activityRemark.noteContent+"','"+activityRemark.id+"')\"  href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
 						"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
-						"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+						"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"deleteRemark('"+activityRemark.id+"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
 						"\t\t\t\t\t</div>\n" +
 						"\t\t\t\t</div>\n" +
 						"\t\t\t</div>")
@@ -294,10 +298,65 @@
 				$(".myHref").mouseout(function(){
 					$(this).children("span").css("color","#E6E6E6");
 				});
+
 			}else{
 				layer.alert(data.message, {icon: 5});
 			}
 		},'json')
+	}
+	//修改市场活动备注
+	function openEditRemark(noteContent,id) {
+		//弹出修改备注模态窗口
+		$('#editRemarkModal').modal('show');
+		//设置备注内容
+		$('#noteContent').val(noteContent);
+
+		//设置隐藏域的id
+		$('#id').val(id);
+	}
+
+	function updateRemark() {
+		//发送异步请求，更新对应的备注内容
+		//点击更新按钮，修改备注内容
+		$.post("/crm/workbench/updateRemark",{
+			'noteContent' : $('#noteContent').val(),
+			'id' : $('#id').val()
+		},function(data){
+			if(data.ok){
+				layer.alert(data.message, {icon: 6});
+				//关闭模态窗口
+				$('#editRemarkModal').modal('hide');
+				$("#" + $('#id').val() + "h5").html($('#noteContent').val());
+			}else{
+				layer.alert(data.message, {icon: 5});
+			}
+		},'json');
+	}
+
+	//删除备注
+	function deleteRemark(id) {
+		//area: ['100px', '50px']:修改窗口宽高
+		layer.msg('确定删除该条吗？', {
+			time: 0, //不自动关闭,
+			anim: 1
+			,btn: ['确定', '取消']
+			,yes: function(index){
+				layer.close(index);
+				//删除
+				$.post("/crm/workbench/deleteRemark",{
+					'id' : id
+				},function(data){
+					if(data.ok){
+						layer.alert(data.message, {icon: 6});
+						//删除指定备注对应dom元素 自己删除自己
+						$("#" + id + "div").remove();
+					}else{
+						layer.alert(data.message, {icon: 5});
+					}
+				},'json')
+
+			}
+		});
 	}
 </script>
 </html>

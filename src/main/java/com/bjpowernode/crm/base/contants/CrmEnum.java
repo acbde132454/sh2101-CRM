@@ -10,7 +10,9 @@ public enum CrmEnum {
     ACTIVITY_ADD("002-001","添加市场活动失败"),
     ACTIVITY_UPDATE("002-002","修改市场活动失败"),
     ACTIVITY_DELETE("002-003","删除市场活动失败"),
-    ACTIVITY_REMARK_ADD("002-004","添加市场活动备注失败");
+    ACTIVITY_REMARK_ADD("002-004","添加市场活动备注失败"),
+    ACTIVITY_REMARK_UPDATE("002-005","修改市场活动备注失败"),
+    ACTIVITY_REMARK_DELETE("002-006","删除市场活动备注失败");
 
 
     private String code;//描述消息/业务类型

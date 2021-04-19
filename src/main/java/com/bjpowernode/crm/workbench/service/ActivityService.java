@@ -21,4 +21,8 @@ public interface ActivityService {
     Activity queryDetail(String id);
 
     ActivityRemark saveActivityRemark(ActivityRemark activityRemark);
+
+    void updateRemark(ActivityRemark activityRemark);
+
+    void deleteRemark(String id);
 }

@@ -120,4 +120,39 @@ public class ActivityController {
         }
         return resultVo;
     }
+
+    //异步修改备注内容
+    @RequestMapping("/workbench/updateRemark")
+    @ResponseBody
+    public ResultVo updateRemark(ActivityRemark activityRemark,HttpSession session){
+        ResultVo resultVo = new ResultVo();
+        try{
+            User user = (User) session.getAttribute("user");
+            activityRemark.setEditBy(user.getName());
+            activityRemark.setEditFlag("1");
+            activityRemark.setEditTime(DateTimeUtil.getSysTime());
+            activityService.updateRemark(activityRemark);
+            resultVo.setOk(true);
+            resultVo.setMessage("修改市场活动备注成功");
+            resultVo.setT(activityRemark);
+        }catch (CrmException e){
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //异步删除备注
+    @RequestMapping("/workbench/deleteRemark")
+    @ResponseBody
+    public ResultVo deleteRemark(String id){
+        ResultVo resultVo = new ResultVo();
+        try{
+            activityService.deleteRemark(id);
+            resultVo.setOk(true);
+            resultVo.setMessage("删除市场活动备注成功");
+        }catch (CrmException e){
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
 }
