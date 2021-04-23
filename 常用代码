@@ -7,7 +7,16 @@ $.post("",{},function(data){
 <script type="text/javascript" src="/crm/jquery/layer.js"></script>
 <link href="/crm/jquery/layer/theme/default/layer.css" type="text/css" rel="stylesheet" />
 layer.alert(data.message, {icon: 6});
-
+//开始单删操作
+layer.msg('确定删除选中的数据吗？', {
+    time: 0 //不自动关闭
+    ,btn: ['确定', '取消']
+    ,yes: function(index){
+        layer.close(index);
+        //删除
+        deleteActivity();
+    }
+});
 
 
 添加市场活动备注方式一

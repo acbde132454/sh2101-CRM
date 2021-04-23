@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -50,7 +51,9 @@
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" name="owner" id="create-marketActivityOwner">
-
+									<c:forEach items="${users}" var="user">
+										<option value="${user.id}">${user.name}</option>
+									</c:forEach>
 								</select>
 							</div>
                             <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -105,13 +108,15 @@
 					<h4 class="modal-title" id="myModalLabel2">修改市场活动</h4>
 				</div>
 				<div class="modal-body">
-				
 					<form class="form-horizontal" id="updateActivityForm" role="form">
 						<input type="hidden" name="id" id="aid">
 						<div class="form-group">
 							<label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" name="owner" id="edit-marketActivityOwner">
+									<c:forEach items="${users}" var="user">
+										<option value="${user.id}">${user.name}</option>
+									</c:forEach>
 								</select>
 							</div>
                             <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -316,6 +321,7 @@
 	}
 
 	//异步查询所有者信息
+/*
 	$('#createActivityBtn').click(function () {
 		//create-marketActivityOwner
 		$.post("/crm/workbench/queryAllOwners",function(data){
@@ -327,6 +333,7 @@
 			$('#create-marketActivityOwner').html(content);
 		},'json')
 	});
+*/
 
 	//日历插件
 	$("#create-startTime").datetimepicker({
@@ -428,7 +435,7 @@
 				$('#edit-cost').val(data.cost);
 				$('#edit-describe').val(data.description);
 				//异步查询所有者信息
-				$.post("/crm/workbench/queryAllOwners",function(data){
+				/*$.post("/crm/workbench/queryAllOwners",function(data){
 					var content = "";
 					for(var i = 0 ; i < data.length; i++){
 						content += "<option value="+data[i].id+">"+data[i].name+"</option>";
@@ -443,7 +450,7 @@
 							$(this).prop('selected',true);
 						}
 					});
-				},'json')
+				},'json')*/
 			},'json')
 
 		}

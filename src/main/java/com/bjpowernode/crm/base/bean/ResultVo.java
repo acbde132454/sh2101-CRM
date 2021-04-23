@@ -2,6 +2,11 @@ package com.bjpowernode.crm.base.bean;
 
 import com.github.pagehelper.PageInfo;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
+
+import javax.sound.midi.Soundbank;
 
 /**
  * 该类用于给客户端返回结果
@@ -10,6 +15,11 @@ import lombok.Data;
  *   可以返回消息
  *
  *   返回用户所需要的数据
+ * @Component
+ * @Controller
+ * @Service
+ *
+ * @Repository
  */
 @Data
 public class ResultVo<T> {

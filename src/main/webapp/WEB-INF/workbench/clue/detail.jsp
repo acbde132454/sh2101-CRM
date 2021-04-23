@@ -1,11 +1,15 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 
-<link href="../../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="../../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<link href="/crm/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="/crm/jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="/crm/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/crm/jquery/layer.js"></script>
+<link href="/crm/jquery/layer/theme/default/layer.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
 
@@ -51,7 +55,7 @@
 </script>
 
 </head>
-<body>
+<link>
 
 	<!-- 关联市场活动的模态窗口 -->
 	<div class="modal fade" id="bundModal" role="dialog">
@@ -65,12 +69,10 @@
 				</div>
 				<div class="modal-body">
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
-						<form class="form-inline" role="form">
-						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
-						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
-						  </div>
-						</form>
+						<div class="form-group has-feedback">
+							<input id="searchInput" type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+						</div>
 					</div>
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
@@ -83,8 +85,8 @@
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="relationActivities">
+							<%--<tr>
 								<td><input type="checkbox"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
@@ -97,13 +99,13 @@
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" onclick="bind()" class="btn btn-primary" data-dismiss="modal">关联</button>
 				</div>
 			</div>
 		</div>
@@ -376,7 +378,7 @@
 		
 		<!-- 备注1 -->
 		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="../../image/user-thumbnail.png" style="width: 30px; height:30px;">
+			<img title="zhangsan" src="/crm/image/user-thumbnail.png" style="width: 30px; height:30px;">
 			<div style="position: relative; top: -40px; left: 40px;" >
 				<h5>哎呦！</h5>
 				<font color="gray">线索</font> <font color="gray">-</font> <b>李四先生-动力节点</b> <small style="color: gray;"> 2017-01-22 10:10:10 由zhangsan</small>
@@ -390,7 +392,7 @@
 		
 		<!-- 备注2 -->
 		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="../../image/user-thumbnail.png" style="width: 30px; height:30px;">
+			<img title="zhangsan" src="/crm/image/user-thumbnail.png" style="width: 30px; height:30px;">
 			<div style="position: relative; top: -40px; left: 40px;" >
 				<h5>呵呵！</h5>
 				<font color="gray">线索</font> <font color="gray">-</font> <b>李四先生-动力节点</b> <small style="color: gray;"> 2017-01-22 10:20:10 由zhangsan</small>
@@ -430,21 +432,24 @@
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="activityBody">
+						<c:forEach items="${clue.activities}" var="activity">
+							<tr>
+								<td>${activity.name}</td>
+								<td>${activity.startDate}</td>
+								<td>${activity.endDate}</td>
+								<td>${activity.owner}</td>
+								<td><a href="javascript:void(0);" onclick="unbind('${activity.id}')" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
+							</tr>
+						</c:forEach>
+
+						<%--<tr>
 							<td>发传单</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
 							<td>zhangsan</td>
 							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
-						<tr>
-							<td>发传单</td>
-							<td>2020-10-10</td>
-							<td>2020-10-20</td>
-							<td>zhangsan</td>
-							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>
@@ -457,5 +462,97 @@
 	
 	
 	<div style="height: 200px;"></div>
+
+    <script>
+		//keypress = keyup + keydown ascii a:97
+		$('#searchInput').keypress(function (event) {
+			//按下回车键，发送异步查询
+			if(event.keyCode == 13){
+				//发送查询市场活动的异步请求
+				$.post("/crm/workbench/clue/queryRelationActivities",{
+					'name' : $(this).val(),
+					'id' : '${clue.id}'
+				},function(data){
+					$('#relationActivities').html("");
+					for (var i = 0 ; i < data.length; i ++){
+						var activity = data[i];
+						$('#relationActivities').append("<tr>\n" +
+								"\t\t\t\t\t\t\t\t<td><input class='son' type=\"checkbox\" value="+activity.id+" /></td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+activity.name+"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+activity.startDate+"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+activity.endDate+"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+activity.owner+"</td>\n" +
+								"\t\t\t\t\t\t\t</tr>");
+					}
+				},'json')
+			}
+		});
+		
+		//点击绑定按钮，绑定当前勾中的市场活动
+		function bind() {
+			var activitIds = [];
+			//1,2,3,4
+			$('.son:checked').each(function () {
+				activitIds.push($(this).val());
+			});
+			//异步关联
+			$.post("/crm/workbench/clue/bind",{
+				'activitIds' : activitIds.join(),
+				'id' : '${clue.id}'
+			},function(data){
+				//关联成功
+				//1、弹出消息
+				if(data.ok){
+					layer.alert(data.message, {icon: 6});
+					//2、刷新当前线索已经关联的市场活动
+					refreshActivity(data);
+				}else{
+					layer.alert(data.message, {icon: 5});
+				}
+			},'json')
+		}
+
+		//解除关联
+		function unbind(activityId) {
+			layer.msg('确定解除选中的关联市场活动吗？', {
+				time: 0 //不自动关闭
+				,btn: ['确定', '取消']
+				,yes: function(index){
+					layer.close(index);
+					//删除
+					$.post("/crm/workbench/clue/unbind",{
+						'clueId' : '${clue.id}',
+						'activityId' : activityId
+					},function(data){
+						//解除绑定成功
+						//1、弹出消息
+						if(data.ok){
+							layer.alert(data.message, {icon: 6});
+							//2、刷新当前线索已经关联的市场活动
+							refreshActivity(data);
+						}else{
+							layer.alert(data.message, {icon: 5});
+						}
+					},'json')
+				}
+			});
+		}
+
+		//抽取刷新当前线索关联市场活动的数据
+		function refreshActivity(data) {
+			$('#activityBody').html("");
+			var activities = data.t;
+			for(var i = 0 ; i < activities.length; i++){
+				var activity = activities[i];
+				$('#activityBody').append("<tr>\n" +
+						"\t\t\t\t\t\t\t<td>"+activity.name+"</td>\n" +
+						"\t\t\t\t\t\t\t<td>"+activity.startDate+"</td>\n" +
+						"\t\t\t\t\t\t\t<td>"+activity.endDate+"</td>\n" +
+						"\t\t\t\t\t\t\t<td>"+activity.owner+"</td>\n" +
+						"\t\t\t\t\t\t\t<td><a href=\"javascript:void(0);\" onclick=\"unbind('"+activity.id+"')\"  style=\"text-decoration: none;\"><span class=\"glyphicon glyphicon-remove\"></span>解除关联</a></td>\n" +
+						"\t\t\t\t\t\t</tr>");
+			}
+		}
+	</script>
 </body>
 </html>

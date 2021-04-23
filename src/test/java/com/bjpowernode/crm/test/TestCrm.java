@@ -120,4 +120,13 @@ public class TestCrm {
     public void test10(){
         System.out.println(File.separator);
     }
+
+    //测试init-method
+    @Test
+    public void test11(){
+        BeanFactory beanFactory =
+                new ClassPathXmlApplicationContext("spring/applicationContext.xml");
+        beanFactory.getBean("resultVo");
+
+    }
 }

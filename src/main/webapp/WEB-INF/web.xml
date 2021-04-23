@@ -12,7 +12,7 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-  <!--加载applicationContext.xml-->
+  <!--加载applicationContext.xml,初始化IOC容器的-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring/applicationContext.xml</param-value>
