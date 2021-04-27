@@ -8,12 +8,11 @@ import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class CrmCache {
@@ -34,6 +33,7 @@ public class CrmCache {
     //等同于 init-method
     @PostConstruct
     public void init(){
+        //缓冲所有者信息
         List<User> users = userMapper.selectAll();
         servletContext.setAttribute("users",users);
 
@@ -57,10 +57,34 @@ public class CrmCache {
             DictionaryValue dictionaryValue = new DictionaryValue();
             dictionaryValue.setTypeCode(code);
 
-            List<DictionaryValue> dictionaryValues = dictionaryValueMapper.select(dictionaryValue);
+            //想得到的结果是有序的，需要进行排序
+            Example example = new Example(DictionaryValue.class);
+            //按指定字段排序
+            example.setOrderByClause("orderNo asc");
+            example.createCriteria().andEqualTo("typeCode",code);
+            List<DictionaryValue> dictionaryValues = dictionaryValueMapper.selectByExample(example);
+            //List<DictionaryValue> dictionaryValues = dictionaryValueMapper.select(dictionaryValue);
 
             map.put(code,dictionaryValues);
         }
         servletContext.setAttribute("map",map);
+
+        //缓冲阶段和可能性的信息
+        //1、读取配置文件 参数:文件名(不能加扩展名)
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("mybatis.Stage2Possibility");
+        //2.获取属性文件中的所有key
+        Enumeration<String> keys = resourceBundle.getKeys();
+        //3、定义一个map来存储阶段和可能性(key,value)
+        //LinkedHashMap:放入的顺序和输出的顺序一样
+        //TreeMap:排序
+        Map<String,String> kMap = new TreeMap<>();
+        while(keys.hasMoreElements()){
+            //获取每一个key
+            String key = keys.nextElement();
+            //根据key获取value
+            String value = resourceBundle.getString(key);
+            kMap.put(key,value);
+        }
+        servletContext.setAttribute("stage2Possibility",kMap);
     }
 }

@@ -1,15 +1,18 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 
-<link href="../../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<link href="../../jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+<link href="/crm/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="/crm/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
 
-<script type="text/javascript" src="../../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/crm/jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="/crm/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/crm/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/crm/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/crm/jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
 
 </head>
 <body>
@@ -157,16 +160,9 @@
 			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 			  <select class="form-control" id="create-transactionStage">
-			  	<option></option>
-			  	<option>资质审查</option>
-			  	<option>需求分析</option>
-			  	<option>价值建议</option>
-			  	<option>确定决策者</option>
-			  	<option>提案/报价</option>
-			  	<option>谈判/复审</option>
-			  	<option>成交</option>
-			  	<option>丢失的线索</option>
-			  	<option>因竞争丢失关闭</option>
+			  	<c:forEach items="${map.stage}" var="stage">
+					<option value="${stage.value}">${stage.text}</option>
+				</c:forEach>
 			  </select>
 			</div>
 		</div>
@@ -242,5 +238,39 @@
 		</div>
 		
 	</form>
+<script>
+
+	/*var person = {"name":"张三","speak":function () {
+			alert("我可以说话");
+		}};
+	person.speak();*/
+	//客户自动补全查询  create-accountName:输入客户名称的文本框
+	$("#create-accountName").typeahead({
+		source: function (customerName, process) {
+			//customerName:用户输入的客户名称
+			$.post(
+					"/crm/workbench/transaction/queryCustomerName",
+					{ "customerName" : customerName },
+					function (data) {
+						//返回List<String>数据即可:就是满足条件的所有客户的名字的集合
+						//alert(data);
+						process(data);
+					},
+					"json"
+			);
+		},
+		//输入内容后延迟多长时间弹出提示内容 单位:毫秒
+		delay: 0
+	});
+	//选中阶段获取阶段的可能性
+	$('#create-transactionStage').change(function () {
+		$.post("/crm/workbench/transaction/queryPossibility",{
+			"stage" : $(this).val()
+		},function(data){
+			//data就是可能性，把可能性设置输入框中
+			$('#create-possibility').val(data);
+		},'json')
+	});
+</script>
 </body>
 </html>

@@ -7,6 +7,7 @@ import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Clue;
 import com.bjpowernode.crm.workbench.bean.ClueActivityRelation;
+import com.bjpowernode.crm.workbench.bean.Transaction;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,29 @@ public class ClueController {
             resultVo.setOk(true);
             resultVo.setMessage("解除绑定市场活动成功");
             resultVo.setT(activities);
+        }catch (CrmException e){
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //从详情页跳转到转换页面
+    @RequestMapping("/workbench/clue/toConverter")
+    public String toConverter(String id,Model model){
+        Clue clue = clueService.clueDetail(id);
+        model.addAttribute("clue",clue);
+        return "/workbench/clue/convert";
+    }
+
+    @RequestMapping("/workbench/clue/convert")
+    @ResponseBody
+    public ResultVo convert(String id, String isCreateTransaction, HttpSession session, Transaction transaction){
+        ResultVo resultVo = new ResultVo();
+        try {
+            User user = (User) session.getAttribute("user");
+            clueService.convert(id,user,isCreateTransaction,transaction);
+            resultVo.setOk(true);
+            resultVo.setMessage("线索转换成功");
         }catch (CrmException e){
             resultVo.setMessage(e.getMessage());
         }

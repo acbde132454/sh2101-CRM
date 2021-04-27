@@ -15,7 +15,8 @@ public enum CrmEnum {
     ACTIVITY_REMARK_DELETE("002-006","删除市场活动备注失败"),
     CLUE_ADD("003-001","添加线索失败"),
     CLUE_RELATION_ACTIVITY_BIND("003-002","线索关联市场活动失败"),
-    CLUE_RELATION_ACTIVITY_UNBIND("003-003","线索关联市场活动失败");
+    CLUE_RELATION_ACTIVITY_UNBIND("003-003","线索关联市场活动失败"),
+    CLUE_CONVERT("003-004","线索转换失败");
 
 
 

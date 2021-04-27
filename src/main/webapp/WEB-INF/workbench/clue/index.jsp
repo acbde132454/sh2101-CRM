@@ -457,7 +457,7 @@
 					<tbody>
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='/crm/workbench/clue/clueDetail?id=74ff9ea0a27846c194bf0a896d6452fa'">李四先生</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='/crm/workbench/clue/clueDetail?id=187243a2a7154e4ebebc3da69b349b5d'">李四先生</a></td>
 							<td>动力节点</td>
 							<td>010-84846003</td>
 							<td>12345678901</td>

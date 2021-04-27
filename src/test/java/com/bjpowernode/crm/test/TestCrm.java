@@ -12,9 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TestCrm {
 
@@ -128,5 +126,19 @@ public class TestCrm {
                 new ClassPathXmlApplicationContext("spring/applicationContext.xml");
         beanFactory.getBean("resultVo");
 
+    }
+
+    //map的数据结构:单向链表+数组实现的
+
+    @Test
+    public void test12(){
+        Map<String,String> map = new HashMap<>();
+        map.put("01资质审查","10");//01资质审查 3
+        map.put("02需求分析","25");//2
+        map.put("03价值建议","40");//0
+        map.put("04确定决策者","40");//2
+
+        System.out.println(map);
+        System.out.println("01资质审查".hashCode() % 4);
     }
 }
