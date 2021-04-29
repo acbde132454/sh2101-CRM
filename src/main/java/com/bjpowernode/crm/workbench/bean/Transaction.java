@@ -43,4 +43,13 @@ public class Transaction {
     private String contactSummary;
     private String nextContactTime;
 
+    //可能性
+    private String possibility;
+
+    //交易备注
+    private List<TransactionRemark> transactionRemarks;
+
+
+    //交易历史
+    private List<TransactionHistory> transactionHistories;
 }

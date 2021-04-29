@@ -30,4 +30,7 @@ public class TransactionHistory {
     private String createTime;
     private String createBy;
     private String tranId;
+
+    //交易可能性
+    private String possibility;
 }
