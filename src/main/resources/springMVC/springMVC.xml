@@ -52,14 +52,17 @@ com.bjpowernode.crm.base.controller,com.bjpowernode.crm.workbench.controller" />
 	</bean>
 
 	<!--注册:登录拦截器-->
-	<!--<mvc:interceptors>
+	<mvc:interceptors>
 		<mvc:interceptor>
-			&lt;!&ndash;path拦截的路径，不是目录，根路径拦截失效[/项目名不需要写]&ndash;&gt;
-			<mvc:mapping path="/**"/>
-			<mvc:exclude-mapping path="/jquery/**" />
+			<!--
+				path拦截的路径，不是目录，根路径拦截失效[/项目名不需要写]
+				exclude:排除
+			-->
+			<mvc:mapping path="/**"/><!--拦截所有请求-->
+			<mvc:exclude-mapping path="/jquery/**" /><!--哪些请求不拦截-->
 			<mvc:exclude-mapping path="/image/**" />
-			<mvc:exclude-mapping path="/ECharts/**" />
-			<bean class="com.bjpowernode.crm.settings.interceptor.CrmLoginInterceptor" />
+			<mvc:exclude-mapping path="/upload/**" />
+			<bean class="com.bjpowernode.crm.base.interceptor.CrmLoginInterceptor" />
 		</mvc:interceptor>
-	</mvc:interceptors>-->
+	</mvc:interceptors>
 </beans>

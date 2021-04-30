@@ -37,8 +37,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<Activity> list(Activity activity) {
+
         Example example = new Example(Activity.class);
         Example.Criteria criteria = example.createCriteria();
+
         //是否有按名称查询
         if(!StrUtil.isEmpty(activity.getName())){
             criteria.andLike("name","%" + activity.getName() + "%");

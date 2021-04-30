@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="/">
+<mapper namespace="com.bjpowernode.crm.workbench.mapper.ChartMapper">
 
+
+    <select id="transaction" resultType="map">
+      select count(*) num,stage from tbl_tran group by stage order by num
+    </select>
 </mapper>

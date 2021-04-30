@@ -124,7 +124,7 @@ public class TestCrm {
     public void test11(){
         BeanFactory beanFactory =
                 new ClassPathXmlApplicationContext("spring/applicationContext.xml");
-        beanFactory.getBean("resultVo");
+        beanFactory.getBean("crmLoginInterceptor");
 
     }
 
